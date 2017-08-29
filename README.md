@@ -1,4 +1,4 @@
-# andoid_train_alarm_clock
+# Andoid Train Alarm Clock
 ## Study
 ### Alarm Clock
 * [tutorial](http://www.concretepage.com/android/android-alarm-clock-tutorial-to-schedule-and-cancel-alarmmanager-pendingintent-and-wakefulbroadcastreceiver-example)
