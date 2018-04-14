@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nicolalandro/andoid_train_alarm_clock.svg?branch=master)](https://travis-ci.org/nicolalandro/andoid_train_alarm_clock)
+
 # Andoid Train Alarm Clock
 ## Study
 ### Alarm Clock
