@@ -13,14 +13,9 @@ android:
  components:
  - tools
  - platform-tools
- - build-tools-$ANDROID_BUILD_TOOLS
- - android-$ANDROID_API
- - android-$EMULATOR_API_LEVEL
- - extra-google-m2repository
- - extra-android-m2repository # for design library
- - addon-google_apis-google-19 # google play services
- - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
- - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
+ - extra
+ - build-tools-26.0.2
+ - android-26
 
 before_install:
   - chmod +x gradlew
@@ -28,7 +23,7 @@ before_install:
 
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-26
+  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
