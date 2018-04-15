@@ -71,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR, mHour % 12);
             calendar.set(Calendar.MINUTE, mMinutes);
-            SimpleDateFormat format1 = new SimpleDateFormat();
-            Log.d("DEBUG!!!!", "OnSwitchClicked: " + format1.format(calendar.getTime()));
+            Log.d("DEBUG!!!!", "OnSwitchClicked: " + (new SimpleDateFormat()).format(calendar.getTime()));
             long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
             Log.d("DEBUG!!!!", "OnSwitchClicked, Diff: " + diff);
             long timeMillis = calendar.getTimeInMillis();
