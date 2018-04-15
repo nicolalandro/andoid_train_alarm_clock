@@ -1,12 +1,6 @@
-package com.example.mint.alarmclock.MainActivityArea;
+package com.example.mint.alarmclock.SetAlarmArea;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.mint.alarmclock.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.example.mint.alarmclock.MainActivityArea;
+package com.example.mint.alarmclock;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,20 +6,18 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.mint.alarmclock.AlarmReceiver;
-import com.example.mint.alarmclock.R;
+import com.example.mint.alarmclock.SetAlarmArea.SetAlarmPresenter;
+import com.example.mint.alarmclock.SetAlarmArea.SetAlarmView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements SetAlarmView{
+public class MainActivity extends AppCompatActivity implements SetAlarmView {
     private SetAlarmPresenter mSetAlarmPresenter;
 
     private PendingIntent mPendingIntent;
