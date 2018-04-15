@@ -7,6 +7,7 @@
 * [code sample](https://github.com/SheldonNeilson/Android-Alarm-Clock)
 ### Train API
 * [GitHub API](https://github.com/sabas/trenitalia)
+* esempio uso partenza: http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/partenze/S01031/Sun%20Apr%2015%202018%2019:47:41%20GMT+0200%20(CEST)
 
 ## Mock Up
 * [Pencil](https://pencil.evolus.vn/)
