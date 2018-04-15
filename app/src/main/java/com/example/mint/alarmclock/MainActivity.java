@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String formatTime(int hour, int minutes) {
         if (mMinutes < 10)
-            return hour + "0" + minutes;
+            return hour + ":0" + minutes;
         return hour + ":" + minutes;
     }
 
