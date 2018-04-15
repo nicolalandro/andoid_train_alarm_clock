@@ -1,6 +1,7 @@
 package com.example.mint.alarmclock;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -25,9 +27,15 @@ public class TrainInfoActivity extends AppCompatActivity {
     };
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView mFromAutocopleteView;
+
     private int mHour;
     private int mMinutes;
+    private int mYear;
+    private int mMonth;
+    private int mDayOfMonth;
+
     private TextView mTimeTextView;
+    private TextView mDateTextView;
 
 
     @Override
@@ -41,9 +49,18 @@ public class TrainInfoActivity extends AppCompatActivity {
         mFromAutocopleteView.setAdapter(adapter);
 
         mTimeTextView = findViewById(R.id.timeFromTextView);
-        mHour = Calendar.HOUR_OF_DAY;
-        mMinutes = Calendar.MINUTE;
+        mDateTextView = findViewById(R.id.dateTextView);
+
+        Calendar calendar = Calendar.getInstance();
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinutes = calendar.get(Calendar.MINUTE);
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mYear = calendar.get(Calendar.DAY_OF_MONTH);
+
         mTimeTextView.setText(formatTime(mHour, mMinutes));
+        mDateTextView.setText(formatDate(mYear, mMonth, mDayOfMonth));
+
     }
 
     public void OnHourTextViewClicked(View view) {
@@ -60,8 +77,19 @@ public class TrainInfoActivity extends AppCompatActivity {
         mTimePicker.show();
     }
 
-    public void OnDateTextViewClicked(View view){
-
+    public void OnDateTextViewClicked(View view) {
+        DatePickerDialog mDatePicker;
+        mDatePicker = new DatePickerDialog(TrainInfoActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                mYear = i;
+                mMonth = i1;
+                mDayOfMonth = i2;
+                mDateTextView.setText(formatDate(mYear, mMonth, mDayOfMonth));
+            }
+        }, mYear, mMonth, mDayOfMonth);
+        mDatePicker.setTitle("Select Date");
+        mDatePicker.show();
     }
 
     public void OnSavedClicked(View view) {
@@ -75,6 +103,10 @@ public class TrainInfoActivity extends AppCompatActivity {
         if (minutes < 10)
             return hour + ":0" + minutes;
         return hour + ":" + minutes;
+    }
+
+    private String formatDate(int year, int month, int dayOfMonth) {
+        return dayOfMonth + "-" + (month + 1) + "-" + year;
     }
 }
 
