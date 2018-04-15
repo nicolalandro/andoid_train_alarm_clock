@@ -18,8 +18,6 @@ import com.example.mint.alarmclock.SetAlarm.SetAlarmView;
 import com.example.mint.alarmclock.SharedPreferences.AlarmState;
 import com.example.mint.alarmclock.SharedPreferences.SharedPreferencesPresenter;
 
-import java.util.Calendar;
-
 public class MainActivity extends AppCompatActivity implements SetAlarmView {
     static final int PICK_TRAIN_INFO = 1;
 
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
     }
 
     public void OnTrainInfoClicked(View switchView) {
-        Intent pickContactIntent = new Intent(this, TrainInfo.class);
+        Intent pickContactIntent = new Intent(this, TrainInfoActivity.class);
         startActivityForResult(pickContactIntent, PICK_TRAIN_INFO);
     }
 

@@ -24,7 +24,7 @@
         <activity
             android:name=".Speech.SpeechActivity"
             android:exported="true"></activity>
-        <activity android:name=".TrainInfo"></activity>
+        <activity android:name=".TrainInfoActivity"></activity>
     </application>
 
 </manifest>
