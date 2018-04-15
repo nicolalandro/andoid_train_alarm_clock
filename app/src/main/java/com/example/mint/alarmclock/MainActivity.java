@@ -39,11 +39,6 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         mSharedPreferencesPresenter = new SharedPreferencesPresenter();
         mSharedPreferencesPresenter.bindView(this);
         mAlarmState = mSharedPreferencesPresenter.restore();
-        if(mAlarmState.isActive()){
-            Intent intent = new Intent(mAlarmState.getIntentUri());
-            mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            mAlarmManager.setRepeating(AlarmManager.RTC, 0, AlarmManager.INTERVAL_HOUR, mPendingIntent);
-        }
 
         mTimeTextView = findViewById(R.id.timeTextView);
         mTimeTextView.setText(formatTime(mAlarmState.getHour(), mAlarmState.getMinutes()));
@@ -59,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         super.onResume();
         mSetAlarmPresenter.bindView(this);
         mSharedPreferencesPresenter.bindView(this);
+        if(mAlarmState.isActive() && mPendingIntent == null){
+            mSetAlarmPresenter.onAlarmActive(mAlarmState.getHour(), mAlarmState.getMinutes());
+        }
     }
 
     @Override
@@ -111,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
 
         mAlarmState.setActive(true);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        mAlarmState.setIntentUri(intent.toUri(Intent.URI_INTENT_SCHEME));
 
         mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millisecond, AlarmManager.INTERVAL_HOUR, mPendingIntent);

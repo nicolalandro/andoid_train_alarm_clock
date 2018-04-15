@@ -11,8 +11,6 @@ public class SharedPreferencesPresenter {
     private static final String HOUR = "hour";
     private static final String MINUTES = "minutes";
     private static final String STATE = "active";
-    private static final String INTENT_URI = "intent_uri";
-
 
     public void bindView(Activity view) {
         mActivity = view;
@@ -28,9 +26,6 @@ public class SharedPreferencesPresenter {
         editor.putInt(HOUR, alarmState.getHour());
         editor.putInt(MINUTES, alarmState.getMinutes());
         editor.putBoolean(STATE, alarmState.isActive());
-        if(alarmState.isActive()){
-            editor.putString(INTENT_URI, alarmState.getIntentUri());
-        }
         editor.apply();
     }
 
@@ -41,9 +36,6 @@ public class SharedPreferencesPresenter {
                 sharedPref.getInt(MINUTES, Calendar.MINUTE),
                 sharedPref.getBoolean(STATE, false)
         );
-        if(alarmState.isActive()){
-            sharedPref.getString(INTENT_URI, "");
-        }
 
         return alarmState;
     }
