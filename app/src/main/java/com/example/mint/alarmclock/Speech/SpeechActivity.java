@@ -47,7 +47,7 @@ public class SpeechActivity extends AppCompatActivity implements SpeechView{
     }
 
     public void OnSpeech(View view) {
-        speakOut("ciao");
+        mSpeechPresenter.getDelayTrainText();
     }
 
 

@@ -21,6 +21,7 @@ public class SetAlarmPresenter {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR, hour % 12);
         calendar.set(Calendar.MINUTE, minutes);
+// se diff è negativa allora schedula al giorno dopo
 
         mAlarmView.setAlarm(calendar.getTimeInMillis());
 
