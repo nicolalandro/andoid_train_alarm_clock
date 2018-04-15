@@ -1,4 +1,4 @@
-package com.example.mint.alarmclock.SetAlarmArea;
+package com.example.mint.alarmclock.SetAlarm;
 
 import android.util.Log;
 

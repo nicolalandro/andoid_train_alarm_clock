@@ -12,8 +12,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.mint.alarmclock.SetAlarmArea.SetAlarmPresenter;
-import com.example.mint.alarmclock.SetAlarmArea.SetAlarmView;
+import com.example.mint.alarmclock.SetAlarm.SetAlarmPresenter;
+import com.example.mint.alarmclock.SetAlarm.SetAlarmView;
 
 import java.util.Calendar;
 

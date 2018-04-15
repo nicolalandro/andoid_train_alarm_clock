@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.mint.alarmclock.SpeechArea.SpeechActivity;
+import com.example.mint.alarmclock.Speech.SpeechActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

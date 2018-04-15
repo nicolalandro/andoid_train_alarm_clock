@@ -1,4 +1,4 @@
-package com.example.mint.alarmclock.SpeechArea;
+package com.example.mint.alarmclock.Speech;
 
 import android.annotation.SuppressLint;
 
