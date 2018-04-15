@@ -14,18 +14,20 @@ import android.widget.Toast;
 
 import com.example.mint.alarmclock.SetAlarm.SetAlarmPresenter;
 import com.example.mint.alarmclock.SetAlarm.SetAlarmView;
+import com.example.mint.alarmclock.SharedPreferences.AlarmState;
+import com.example.mint.alarmclock.SharedPreferences.SharedPreferencesPresenter;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements SetAlarmView {
     private SetAlarmPresenter mSetAlarmPresenter;
+    private SharedPreferencesPresenter mSharedPreferencesPresenter;
 
     private PendingIntent mPendingIntent;
     private AlarmManager mAlarmManager;
 
     private TextView mTimeTextView;
-    private int mHour;
-    private int mMinutes;
+    private AlarmState mAlarmState;
 
 
     @Override
@@ -34,12 +36,15 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         setContentView(R.layout.activity_main);
 
         mSetAlarmPresenter = new SetAlarmPresenter();
+        mSharedPreferencesPresenter = new SharedPreferencesPresenter();
+        mSharedPreferencesPresenter.bindView(this);
+        mAlarmState = mSharedPreferencesPresenter.restore();
 
         mTimeTextView = findViewById(R.id.timeTextView);
-        Calendar mcurrentTime = Calendar.getInstance();
-        mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        mMinutes = mcurrentTime.get(Calendar.MINUTE);
-        mTimeTextView.setText(formatTime(mHour, mMinutes));
+        mTimeTextView.setText(formatTime(mAlarmState.getHour(), mAlarmState.getMinutes()));
+
+        Switch activeAlarmSwitch = findViewById(R.id.activeAlarmSwitch);
+        activeAlarmSwitch.setChecked(mAlarmState.isActive());
 
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
@@ -48,16 +53,19 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
     protected void onResume() {
         super.onResume();
         mSetAlarmPresenter.bindView(this);
+        mSharedPreferencesPresenter.bindView(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mSetAlarmPresenter.unbindView();
+        mSharedPreferencesPresenter.save(mAlarmState);
+        mSharedPreferencesPresenter.unbindView();
     }
 
     private String formatTime(int hour, int minutes) {
-        if (mMinutes < 10)
+        if (minutes < 10)
             return hour + ":0" + minutes;
         return hour + ":" + minutes;
     }
@@ -67,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         mTimePicker = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                mHour = selectedHour;
-                mMinutes = selectedMinute;
+                mAlarmState.setHour(selectedHour);
+                mAlarmState.setMinutes(selectedMinute);
                 mTimeTextView.setText(formatTime(selectedHour, selectedMinute));
             }
-        }, mHour, mMinutes, true);
+        }, mAlarmState.getHour(), mAlarmState.getMinutes(), true);
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
@@ -79,11 +87,17 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
     public void OnSwitchClicked(View switchView) {
         Switch switchElement = (Switch) switchView;
         if (switchElement.isChecked()) {
-            mSetAlarmPresenter.onAlarmActive(mHour, mMinutes);
+            mAlarmState.setActive(true);
+            mSetAlarmPresenter.onAlarmActive(mAlarmState.getHour(), mAlarmState.getMinutes());
         } else {
-            Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
-
-            mAlarmManager.cancel(mPendingIntent);
+            mAlarmState.setActive(false);
+            try {
+                mAlarmManager.cancel(mPendingIntent);
+                Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e){
+                Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
