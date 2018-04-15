@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,8 +63,12 @@ public class MainActivity extends AppCompatActivity {
             mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR, mHour%12);
             calendar.set(Calendar.MINUTE, mMinutes);
-            calendar.set(Calendar.HOUR, mHour);
+            SimpleDateFormat format1 = new SimpleDateFormat();
+            Log.d("DEBUG!!!!", "OnSwitchClicked: " + format1.format(calendar.getTime()));
+            long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
+            Log.d("DEBUG!!!!", "OnSwitchClicked, Diff: " + diff );
             long timeMillis = calendar.getTimeInMillis();
             mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeMillis, AlarmManager.INTERVAL_HOUR, mPendingIntent);
 
