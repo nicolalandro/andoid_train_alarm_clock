@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.example.mint.alarmclock.SharedPreferences.SharedPreferencesPresenter;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements SetAlarmView {
+    static final int PICK_TRAIN_INFO = 1;
+
     private SetAlarmPresenter mSetAlarmPresenter;
     private SharedPreferencesPresenter mSharedPreferencesPresenter;
 
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         super.onResume();
         mSetAlarmPresenter.bindView(this);
         mSharedPreferencesPresenter.bindView(this);
-        if(mAlarmState.isActive() && mPendingIntent == null){
+        if (mAlarmState.isActive() && mPendingIntent == null) {
             mSetAlarmPresenter.onAlarmActive(mAlarmState.getHour(), mAlarmState.getMinutes());
         }
     }
@@ -65,6 +68,14 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         mSetAlarmPresenter.unbindView();
         mSharedPreferencesPresenter.save(mAlarmState);
         mSharedPreferencesPresenter.unbindView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == PICK_TRAIN_INFO && resultCode == RESULT_OK) {
+            Log.d("DEBUG!!!!", "onActivityResult: ");
+        }
     }
 
     private String formatTime(int hour, int minutes) {
@@ -96,11 +107,15 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
             try {
                 mAlarmManager.cancel(mPendingIntent);
                 Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void OnTrainInfoClicked(View switchView) {
+        Intent pickContactIntent = new Intent(this, TrainInfo.class);
+        startActivityForResult(pickContactIntent, PICK_TRAIN_INFO);
     }
 
     @Override
