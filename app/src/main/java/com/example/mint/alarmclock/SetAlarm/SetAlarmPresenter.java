@@ -21,12 +21,14 @@ public class SetAlarmPresenter {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR, hour % 12);
         calendar.set(Calendar.MINUTE, minutes);
-// se diff è negativa allora schedula al giorno dopo
-
+        long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
+        if ((int)diff < 0) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            Log.d("DEBUG!!!!", "OnSwitchClicked: change date");
+        }
         mAlarmView.setAlarm(calendar.getTimeInMillis());
 
         Log.d("DEBUG!!!!", "OnSwitchClicked: " + (new SimpleDateFormat()).format(calendar.getTime()));
-        long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
         Log.d("DEBUG!!!!", "OnSwitchClicked, Diff: " + diff);
     }
 }
