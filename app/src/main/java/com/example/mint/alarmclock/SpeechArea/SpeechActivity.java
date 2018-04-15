@@ -10,7 +10,7 @@ import com.example.mint.alarmclock.R;
 import java.util.Locale;
 
 public class SpeechActivity extends AppCompatActivity implements SpeechView{
-    private TextToSpeech ttobj;
+    private TextToSpeech mTextToSpeach;
     private SpeechPresenter mSpeechPresenter;
 
     @Override
@@ -18,7 +18,7 @@ public class SpeechActivity extends AppCompatActivity implements SpeechView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech);
 
-        ttobj = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+        mTextToSpeach = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
             }
@@ -42,8 +42,8 @@ public class SpeechActivity extends AppCompatActivity implements SpeechView{
     }
 
     public void speakOut(String s) {
-        ttobj.setLanguage(Locale.ITALY);
-        ttobj.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+        mTextToSpeach.setLanguage(Locale.ITALY);
+        mTextToSpeach.speak(s, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void OnSpeech(View view) {
