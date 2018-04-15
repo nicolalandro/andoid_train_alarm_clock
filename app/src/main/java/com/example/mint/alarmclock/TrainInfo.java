@@ -8,12 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class TrainInfo extends AppCompatActivity {
     private String[] AUTOCOMPLETE = new String[]{
             "BUSTO ARSIZIO|S01031",
@@ -24,17 +18,23 @@ public class TrainInfo extends AppCompatActivity {
             "VARESE CASBENO|N00025",
             "VARESE NORD|N00024"
     };
-    private AutoCompleteTextView mAutocompleteFromTextView;
     private ArrayAdapter<String> adapter;
+    private AutoCompleteTextView mFromAutocopleteView;
+    private AutoCompleteTextView mToAutocompleteView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_info);
 
-        mAutocompleteFromTextView = findViewById(R.id.autoCompleteFromTextView);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, AUTOCOMPLETE);
-        mAutocompleteFromTextView.setAdapter(adapter);
+
+        mFromAutocopleteView = findViewById(R.id.autoCompleteFromTextView);
+        mFromAutocopleteView.setAdapter(adapter);
+
+        mToAutocompleteView = findViewById(R.id.autoCompleteToTextView);
+        mToAutocompleteView.setAdapter(adapter);
     }
 
     public void OnSavedClicked(View view) {
