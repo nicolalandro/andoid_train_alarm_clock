@@ -3,15 +3,9 @@ package com.example.mint.alarmclock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
-import java.util.Locale;
+import com.example.mint.alarmclock.SpeechArea.SpeechActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

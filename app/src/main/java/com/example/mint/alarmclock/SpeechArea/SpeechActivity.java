@@ -1,4 +1,4 @@
-package com.example.mint.alarmclock;
+package com.example.mint.alarmclock.SpeechArea;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.mint.alarmclock.R;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 

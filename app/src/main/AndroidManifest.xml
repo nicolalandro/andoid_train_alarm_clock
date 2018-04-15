@@ -23,7 +23,7 @@
 
         </receiver>
 
-        <activity android:name=".SpeechActivity" android:exported="true">
+        <activity android:name=".SpeechArea.SpeechActivity" android:exported="true">
 
         </activity>
 
