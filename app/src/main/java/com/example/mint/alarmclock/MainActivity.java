@@ -2,10 +2,13 @@ package com.example.mint.alarmclock;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -13,45 +16,60 @@ import android.widget.ToggleButton;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    TimePicker alarmTimePicker;
-    PendingIntent pendingIntent;
-    AlarmManager alarmManager;
+    private PendingIntent mPendingIntent;
+    private AlarmManager mAlarmManager;
+
+    private TextView mTimeTextView;
+    private int mHour;
+    private int mMinutes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        alarmTimePicker = findViewById(R.id.timePicker);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+        mTimeTextView = findViewById(R.id.timeTextView);
+        Calendar mcurrentTime = Calendar.getInstance();
+        mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        mMinutes = mcurrentTime.get(Calendar.MINUTE);
+        mTimeTextView.setText(mHour + ":" + mMinutes);
+
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 
-    public void OnToggleClicked(View view)
-    {
-        long time;
-        if (((ToggleButton) view).isChecked())
-        {
-            Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
-            calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-            time=(calendar.getTimeInMillis()-(calendar.getTimeInMillis()%60000));
-            if(System.currentTimeMillis()>time)
-            {
-                if (calendar.AM_PM == 0)
-                    time = time + (1000*60*60*12);
-                else
-                    time = time + (1000*60*60*24);
+    public void OnHourTextViewClicked(View view) {
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                mHour = selectedHour;
+                mMinutes = selectedMinute;
+                mTimeTextView.setText(selectedHour + ":" + selectedMinute);
             }
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
-        }
-        else
-        {
-            alarmManager.cancel(pendingIntent);
+        }, mHour, mMinutes, true);
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
+    public void OnSwitchClicked(View switchView) {
+        Switch switchElement = (Switch) switchView;
+        if (switchElement.isChecked()) {
+            Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.MINUTE, mMinutes);
+            calendar.set(Calendar.HOUR, mHour);
+            long timeMillis = calendar.getTimeInMillis();
+            mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeMillis, AlarmManager.INTERVAL_HOUR, mPendingIntent);
+
+        } else {
             Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
+
+            mAlarmManager.cancel(mPendingIntent);
         }
     }
 }

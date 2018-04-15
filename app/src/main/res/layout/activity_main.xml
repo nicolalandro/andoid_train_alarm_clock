@@ -4,19 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:weightSum="3">
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:checked="false"
-        android:onClick="OnToggleClicked" />
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="OnHourTextViewClicked"
+            android:textSize="60sp"
+            android:layout_weight="2"/>
+
+        <Switch
+            android:layout_margin="5dp"
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:onClick="OnSwitchClicked"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
