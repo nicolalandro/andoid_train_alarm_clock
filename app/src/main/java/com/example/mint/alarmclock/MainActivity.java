@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
         mSharedPreferencesPresenter = new SharedPreferencesPresenter();
         mSharedPreferencesPresenter.bindView(this);
         mAlarmState = mSharedPreferencesPresenter.restore();
+        if(mAlarmState.isActive()){
+            Intent intent = new Intent(mAlarmState.getIntentUri());
+            mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            mAlarmManager.setRepeating(AlarmManager.RTC, 0, AlarmManager.INTERVAL_HOUR, mPendingIntent);
+        }
 
         mTimeTextView = findViewById(R.id.timeTextView);
         mTimeTextView.setText(formatTime(mAlarmState.getHour(), mAlarmState.getMinutes()));
@@ -87,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
     public void OnSwitchClicked(View switchView) {
         Switch switchElement = (Switch) switchView;
         if (switchElement.isChecked()) {
-            mAlarmState.setActive(true);
             mSetAlarmPresenter.onAlarmActive(mAlarmState.getHour(), mAlarmState.getMinutes());
         } else {
             mAlarmState.setActive(false);
@@ -105,7 +109,10 @@ public class MainActivity extends AppCompatActivity implements SetAlarmView {
     public void setAlarm(long millisecond) {
         Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
 
+        mAlarmState.setActive(true);
         Intent intent = new Intent(this, AlarmReceiver.class);
+        mAlarmState.setIntentUri(intent.toUri(Intent.URI_INTENT_SCHEME));
+
         mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millisecond, AlarmManager.INTERVAL_HOUR, mPendingIntent);
     }

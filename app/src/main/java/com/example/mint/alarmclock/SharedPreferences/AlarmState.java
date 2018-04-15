@@ -4,6 +4,7 @@ public class AlarmState {
     private int hour;
     private int minutes;
     private boolean active;
+    private String intentUri;
 
     public AlarmState(int hour, int minutes, boolean active) {
         this.hour = hour;
@@ -34,4 +35,13 @@ public class AlarmState {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public String getIntentUri() {
+        return intentUri;
+    }
+
+    public void setIntentUri(String intentUri) {
+        this.intentUri = intentUri;
+    }
 }
+
