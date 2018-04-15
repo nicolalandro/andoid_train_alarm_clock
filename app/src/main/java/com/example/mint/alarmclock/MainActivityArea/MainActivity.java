@@ -1,4 +1,4 @@
-package com.example.mint.alarmclock;
+package com.example.mint.alarmclock.MainActivityArea;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,12 +12,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+
+import com.example.mint.alarmclock.AlarmReceiver;
+import com.example.mint.alarmclock.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SetAlarmView{
+    private SetAlarmPresenter mSetAlarmPresenter;
+
     private PendingIntent mPendingIntent;
     private AlarmManager mAlarmManager;
 
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSetAlarmPresenter = new SetAlarmPresenter();
+
         mTimeTextView = findViewById(R.id.timeTextView);
         Calendar mcurrentTime = Calendar.getInstance();
         mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -38,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
         mTimeTextView.setText(formatTime(mHour, mMinutes));
 
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSetAlarmPresenter.bindView(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSetAlarmPresenter.unbindView();
     }
 
     private String formatTime(int hour, int minutes) {
@@ -63,24 +81,20 @@ public class MainActivity extends AppCompatActivity {
     public void OnSwitchClicked(View switchView) {
         Switch switchElement = (Switch) switchView;
         if (switchElement.isChecked()) {
-            Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR, mHour % 12);
-            calendar.set(Calendar.MINUTE, mMinutes);
-            Log.d("DEBUG!!!!", "OnSwitchClicked: " + (new SimpleDateFormat()).format(calendar.getTime()));
-            long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
-            Log.d("DEBUG!!!!", "OnSwitchClicked, Diff: " + diff);
-            long timeMillis = calendar.getTimeInMillis();
-            mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeMillis, AlarmManager.INTERVAL_HOUR, mPendingIntent);
-
+            mSetAlarmPresenter.onAlarmActive(mHour, mMinutes);
         } else {
             Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
 
             mAlarmManager.cancel(mPendingIntent);
         }
+    }
+
+    @Override
+    public void setAlarm(long millisecond) {
+        Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millisecond, AlarmManager.INTERVAL_HOUR, mPendingIntent);
     }
 }
