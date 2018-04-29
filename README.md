@@ -10,6 +10,9 @@
 * esempio uso partenza: http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/partenze/S01031/Sun%20Apr%2015%202018%2019:47:41%20GMT+0200%20(CEST)
   * Minimum http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/partenze/S01031/Apr%2016%202018%207:10
 
+### Real code sample
+* https://github.com/philliphsu/ClockPlus
+
 ## Mock Up
 * [Pencil](https://pencil.evolus.vn/)
 * Android lollipop plugin
