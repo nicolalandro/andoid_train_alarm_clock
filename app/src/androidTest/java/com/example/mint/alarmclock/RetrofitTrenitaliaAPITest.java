@@ -75,43 +75,4 @@ public class RetrofitTrenitaliaAPITest {
                 i.split("\n")[0]
         );
     }
-
-    @Test
-    public void retrofitTrainSearch() throws IOException {
-//        Fri Jun 01 2018 20:21:44 GMT+0200 (GMT+02:00)
-//        DateFormat formatter = new SimpleDateFormat("EEE%20MMM%20dd%20yyyy%20HH:mm:ss%20'GMT'Z%20(z)", Locale.US);
-        DateFormat formatter = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (z)", Locale.US);
-        Date today = Calendar.getInstance().getTime();
-        String reportDate = formatter.format(today);
-//        assertEquals(
-//                "Fri%20Jun%2001%202018%2020:36:57%20GMT+0200%20(GMT+02:00)",
-//                reportDate
-//        );
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.viaggiatreno.it/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        TrenitaliaService service = retrofit.create(TrenitaliaService.class);
-
-        Observable<List<Train>> observable = service.searchTrain("S01031", reportDate);
-//        assertEquals(
-//                "http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/autocompletaStazione/S01031/Fri%20Jun%2001%202018%2020:40:51%20GMT+0200%20(GMT+02:00)",
-//                call.request().url().toString()
-//        );
-        observable
-                .subscribe(
-                new Consumer<List<Train>>() {
-                    @Override
-                    public void accept(List<Train> trains) throws Exception {
-                        //use the data
-                    }
-                });
-//        assertEquals(
-//                14,
-//                i.size()
-//        );
-    }
 }
