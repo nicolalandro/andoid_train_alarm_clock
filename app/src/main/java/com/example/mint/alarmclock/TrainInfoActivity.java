@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -146,18 +145,18 @@ public class TrainInfoActivity extends AppCompatActivity {
         Date today = Calendar.getInstance().getTime();
         String todayString = formatter.format(today);
 
-        Observable<List<Train>> obsevable = mTrenitaliaService.searchTrain(fromString, todayString);
-        obsevable
+        mTrenitaliaService
+                .searchTrain(fromString, todayString)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(
-                new Consumer<List<Train>>() {
-                    @Override
-                    public void accept(List<Train> trains){
-                        setTrainList(trains);
-                    }
-                }
-        );
+                        new Consumer<List<Train>>() {
+                            @Override
+                            public void accept(List<Train> trains) {
+                                setTrainList(trains);
+                            }
+                        }
+                );
     }
 
     public void setTrainList(List<Train> trains) {
