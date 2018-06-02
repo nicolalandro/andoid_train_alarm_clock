@@ -19,7 +19,6 @@ import com.example.mint.alarmclock.TrenitaliaAPI.Train;
 import com.example.mint.alarmclock.TrenitaliaAPI.TrenitaliaService;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,8 +32,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -143,12 +140,13 @@ public class TrainInfoActivity extends AppCompatActivity {
     }
 
     public void OnSearchClicked(View view) {
-        String from = mFromAutocopleteView.getText().toString().split("|")[1];
+        String fromString = mFromAutocopleteView.getText().toString().split("\\|")[1];
+        Log.d("Debug!!!", "OnSearchClicked: "+ fromString);
         DateFormat formatter = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (z)", Locale.US);
         Date today = Calendar.getInstance().getTime();
         String todayString = formatter.format(today);
 
-        Observable<List<Train>> obsevable = mTrenitaliaService.searchTrain("S01031", todayString);
+        Observable<List<Train>> obsevable = mTrenitaliaService.searchTrain(fromString, todayString);
         obsevable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
