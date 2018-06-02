@@ -17,7 +17,9 @@ import android.widget.TimePicker;
 
 import com.example.mint.alarmclock.TrenitaliaAPI.Train;
 import com.example.mint.alarmclock.TrenitaliaAPI.TrenitaliaService;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,8 +29,10 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -59,6 +63,8 @@ public class TrainInfoActivity extends AppCompatActivity {
     private ArrayAdapter<String> mTrainArrayAdapter;
     private ArrayList<String> listItems = new ArrayList<>();
     private TrenitaliaService mTrenitaliaService;
+    private PublishSubject<PublishSubject<List<Train>>> mNet;
+    private PublishSubject<List<Train>> mGui;
 
 
     @Override
@@ -69,6 +75,7 @@ public class TrainInfoActivity extends AppCompatActivity {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.viaggiatreno.it/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         mTrenitaliaService = retrofit.create(TrenitaliaService.class);
 
@@ -97,7 +104,6 @@ public class TrainInfoActivity extends AppCompatActivity {
 
         mTimeTextView.setText(formatTime(mHour, mMinutes));
         mDateTextView.setText(formatDate(mYear, mMonth, mDayOfMonth));
-
     }
 
     public void OnHourTextViewClicked(View view) {
@@ -138,29 +144,27 @@ public class TrainInfoActivity extends AppCompatActivity {
 
     public void OnSearchClicked(View view) {
         String from = mFromAutocopleteView.getText().toString().split("|")[1];
-        Observable<String> delayObsevable = Observable.just(from);
-        delayObsevable
+        DateFormat formatter = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (z)", Locale.US);
+        Date today = Calendar.getInstance().getTime();
+        String todayString = formatter.format(today);
+
+        Observable<List<Train>> obsevable = mTrenitaliaService.searchTrain("S01031", todayString);
+        obsevable
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(
-                        new Consumer<String>() {
-                            @Override
-                            public void accept(String s) throws Exception {
-                                DateFormat formatter = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (z)", Locale.US);
-                                Date today = Calendar.getInstance().getTime();
-                                String reportDate = formatter.format(today);
-                                Call<List<Train>> call = mTrenitaliaService.searchTrain("S01031", reportDate);
-                                Response<List<Train>> response = call.execute();
-                                List<Train> result = response.body();
-                                Log.d("DEBUG!!!", "accept: "+result.size());
-//                                setTrainList(result);
-                            }
-                        }
-                );
+                new Consumer<List<Train>>() {
+                    @Override
+                    public void accept(List<Train> trains){
+                        setTrainList(trains);
+                    }
+                }
+        );
     }
 
-    public void setTrainList(List<Train> trains){
+    public void setTrainList(List<Train> trains) {
         mTrainArrayAdapter.clear();
-        for (Train train: trains) {
+        for (Train train : trains) {
             mTrainArrayAdapter.add(train.toString());
         }
     }

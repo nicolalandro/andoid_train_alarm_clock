@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.example.mint.alarmclock.TrenitaliaAPI.InfoTrainResponse;
 import com.example.mint.alarmclock.TrenitaliaAPI.Train;
 import com.example.mint.alarmclock.TrenitaliaAPI.TrenitaliaService;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -88,17 +91,24 @@ public class RetrofitTrenitaliaAPITest {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.viaggiatreno.it/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         TrenitaliaService service = retrofit.create(TrenitaliaService.class);
 
-        Call<List<Train>> call = service.searchTrain("S01031", reportDate);
+        Observable<List<Train>> observable = service.searchTrain("S01031", reportDate);
 //        assertEquals(
 //                "http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/autocompletaStazione/S01031/Fri%20Jun%2001%202018%2020:40:51%20GMT+0200%20(GMT+02:00)",
 //                call.request().url().toString()
 //        );
-        Response<List<Train>> response = call.execute();
-        List<Train> i = response.body();
+        observable
+                .subscribe(
+                new Consumer<List<Train>>() {
+                    @Override
+                    public void accept(List<Train> trains) throws Exception {
+                        //use the data
+                    }
+                });
 //        assertEquals(
 //                14,
 //                i.size()

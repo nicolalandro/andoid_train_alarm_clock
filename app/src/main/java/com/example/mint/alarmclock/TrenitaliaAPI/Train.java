@@ -15,4 +15,8 @@ public class Train {
         this.mOriginCode = mOriginCode;
         this.mOrarioPartenza = mOrarioPartenza;
     }
+
+    public String toString(){
+        return mTrainNumber + " " + mOriginCode + " " + mOrarioPartenza;
+    }
 }

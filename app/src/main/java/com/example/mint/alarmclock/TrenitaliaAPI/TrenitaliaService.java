@@ -2,6 +2,7 @@ package com.example.mint.alarmclock.TrenitaliaAPI;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,5 +15,5 @@ public interface TrenitaliaService {
     Call<String> stationCodeAutosuggest(@Path("strpartenza") String str);
 
     @GET("/viaggiatrenonew/resteasy/viaggiatreno/partenze/{codpartenza}/{timestamp}")
-    Call<List<Train>> searchTrain(@Path("codpartenza") String codPartenza, @Path("timestamp") String timestamp);
+    Observable<List<Train>> searchTrain(@Path("codpartenza") String codPartenza, @Path("timestamp") String timestamp);
 }
