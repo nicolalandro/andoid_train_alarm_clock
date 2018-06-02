@@ -3,7 +3,7 @@ package com.example.mint.alarmclock.TrenitaliaAPI;
 import com.google.gson.annotations.SerializedName;
 
 public class Train {
-    @SerializedName("numeroTreo")
+    @SerializedName("numeroTreno")
     private int mTrainNumber;
     @SerializedName("codOrigine")
     private String mOriginCode;
